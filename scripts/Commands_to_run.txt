@@ -1,0 +1,81 @@
+# Go to the new project
+Set-Location -Path "C:\Users\Manikanta\Projects\water-conservation-crm-new"
+
+# (Optional) Verify alias exists
+sf org list --all
+
+# If not authenticated for watercrmo yet:
+sf auth login web -a watercrmo -r https://login.salesforce.com
+
+# Go to the project
+Set-Location -Path "C:\Users\Manikanta\Projects\water-conservation-crm-new"
+
+#Deploy objects 
+sf project deploy start -o watercrmo --source-dir force-app\main\default\objects
+
+#Deploy Apex 
+sf project deploy start -o watercrmo --source-dir force-app\main\default\classes --source-dir force-app\main\default\triggers
+
+#Deploy LWC
+sf project deploy start -o watercrmo --source-dir force-app\main\default\lwc
+
+#Deploy permission sets 
+sf project deploy start -o watercrmo --source-dir force-app\main\default\permissionsets
+
+#Assign permission sets (broad dev access already configured)
+
+sf org assign permset -n Facility_Manager -o watercrmo
+sf org assign permset -n Maintenance_Staff -o watercrmo
+sf org assign permset -n Resident -o watercrmo
+
+# Open the org
+sf org open -o watercrmo
+
+# Open Lightning App Builder (to add the waterDashboard LWC to Home/App page)
+sf org open --target-org watercrmo --path "/lightning/setup/AppBuilder/home"
+ sf org open --target-org watercrmo --path "/lightning/page/home"       
+# Custom objects
+sf org open --target-org watercrmo --path "/lightning/o/Facility__c/list"
+sf org open --target-org watercrmo --path "/lightning/o/Building__c/list"
+sf org open --target-org watercrmo --path "/lightning/o/Unit__c/list"
+sf org open --target-org watercrmo --path "/lightning/o/Water_Usage__c/list"
+sf org open --target-org watercrmo --path "/lightning/o/Recycling_Log__c/list"
+sf org open --target-org watercrmo --path "/lightning/o/Leak_Report__c/list"
+
+# System objects (optional)
+sf org open --target-org watercrmo --path "/lightning/o/Task/list"
+sf org open --target-org watercrmo --path "/lightning/o/Account/list"
+sf org open --target-org watercrmo --path "/lightning/o/Contact/list"
+
+#Open “New” record pages
+sf org open --target-org watercrmo --path "/lightning/o/Facility__c/new"
+sf org open --target-org watercrmo --path "/lightning/o/Building__c/new"
+sf org open --target-org watercrmo --path "/lightning/o/Unit__c/new"
+sf org open --target-org watercrmo --path "/lightning/o/Water_Usage__c/new"
+sf org open --target-org watercrmo --path "/lightning/o/Recycling_Log__c/new"
+sf org open --target-org watercrmo --path "/lightning/o/Leak_Report__c/new"
+
+#Data
+
+# Verify Facility rollups updated
+sf data query -o watercrmo -q "SELECT Name, Last_Month_Usage__c, Last_Month_Recycled__c, Conservation_Score__c FROM Facility__c WHERE Id='$fid'"
+
+#Quick verification checks
+
+# Confirm objects exist
+sf data query -o watercrmo -q "SELECT QualifiedApiName FROM EntityDefinition WHERE QualifiedApiName IN ('Facility__c','Building__c','Unit__c','Water_Usage__c','Recycling_Log__c','Leak_Report__c')"
+
+# See Apex classes (service/rollup present)
+sf apex list -o watercrmo
+
+
+#Quick org checks (counts will also show on the dashboard LWC)
+
+sf data query -o watercrmo -q "SELECT COUNT() FROM Facility__c"
+sf data query -o watercrmo -q "SELECT COUNT() FROM Building__c"
+sf data query -o watercrmo -q "SELECT COUNT() FROM Unit__c"
+sf data query -o watercrmo -q "SELECT COUNT() FROM Water_Usage__c"
+sf data query -o watercrmo -q "SELECT COUNT() FROM Recycling_Log__c"
+sf data query -o watercrmo -q "SELECT COUNT() FROM Leak_Report__c"
+
+
