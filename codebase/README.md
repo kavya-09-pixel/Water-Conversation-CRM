@@ -1,4 +1,4 @@
-# Water Conservation CRM (New)
+# Water Conservation CRM 
 
 A fresh Salesforce DX project scaffolded from scratch to track water usage, leaks, and recycling.
 
