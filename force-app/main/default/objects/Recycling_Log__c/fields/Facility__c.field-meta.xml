@@ -5,8 +5,9 @@
     <label>Facility</label>
     <referenceTo>Facility__c</referenceTo>
     <relationshipLabel>Facility</relationshipLabel>
-    <relationshipName>Facility</relationshipName>
+    <relationshipName>RecyclingFacility</relationshipName>
     <required>true</required>
     <trackHistory>false</trackHistory>
     <type>Lookup</type>
+    <deleteConstraint>Restrict</deleteConstraint>
 </CustomField>

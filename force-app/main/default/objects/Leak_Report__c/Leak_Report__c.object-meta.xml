@@ -9,5 +9,6 @@
     </nameField>
     <deploymentStatus>Deployed</deploymentStatus>
     <enableActivities>true</enableActivities>
+    <enableHistory>true</enableHistory>
     <sharingModel>Private</sharingModel>
 </CustomObject>
